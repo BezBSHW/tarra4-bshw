@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Location Show</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Location Show">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Details</h1>
+    <table>
+        <tr>
+            <td style="text-align: center"><a href="/location/bwip/<%= one._id %>/<%= one.locate %>" download="<%= one.locate %>.png">
+                    <img src="/location/bwipimg/<%= one._id %>/<%= one.locate %>"></a></td>
+            <td style="text-align: center"><a href="/location/bwipqr/<%= one._id %>/<%= one.locate %>" download="<%= one.locate %>qr.png">
+                    <img src="/location/bwipqrimg/<%= one._id %>/<%= one.locate %>"></a></td>
+        </tr>
+    </table>
+    <table>
+        <tbody>
+        <tr>
+            <td>Locate</td>
+            <td><%= one.locate %></td>
+        </tr>
+        <tr>
+            <td>Item Type</td>
+            <td><%= one.itemType %></td>
+        </tr>
+        <tr>
+            <td>Notes</td>
+            <td><%= one.notes %></td>
+        </tr>
+
+        <% if(one.locked) {%>
+        <tr>
+            <td><a href="/report/location/<%= one._id%>">EXCEL</a></td>
+        </tr>
+        <tr>
+            <td><a href="/location/unlock/<%= one._id %>">UNLOCK</a></td>
+        </tr>
+            <% } else {%>
+        <tr>
+            <td><a href="/location/edit/<%= one._id %>">EDIT</a></td>
+        </tr>
+        <tr>
+            <td><a href="/location/lock/<%= one._id %>">LOCK</a></td>
+        </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <% let manyCount = 0;%>
+    <% for(let i=0;i<many.length;i++){%>
+        <% if (!many[i].locked && many[i].itemType==one.itemType) {%>
+        <% manyCount++; %>
+        <% } %>
+    <% } %>
+
+    <% if (!one.locked&&manyCount>0) { %>
+    <form action="/location/move/" method="post" oninvalid="subbutton.disabled=true; return true" onsubmit="subbutton.disabled=true; return true;">
+        <select name="movement">
+            <% for(let i=0;i<many.length;i++){%>
+                <% if (!many[i].locked && many[i].itemType==one.itemType) {%>
+                <option value="<%=many[i].id%>"><%=many[i].locate%></option>
+                <% } %>
+            <% } %>
+        </select>
+        <button id="subbutton" type="submit">Move</button>
+    <% } %>
+
+    <% if(one.itemList.length>0) { %>
+        <h1>Items</h1>
+        <table class="list-table">
+            <thead>
+            <tr>
+                <% if (!one.locked&&manyCount>0) { %>
+                    <th>ID</th>
+                <% } %>
+                <th>itemType</th>
+                <% if (['Aio', 'Desktop', 'Laptop'].includes(one.itemType)) { %>
+                    <th>Processor</th>
+                    <th>Ram</th>
+                    <th>Drive</th>
+                <% } %>
+                <% if (!one.locked&&manyCount>0) { %>
+                    <th>Move</th>
+                <% } %>
+                <% Object.entries(one.itemList[0].identify).forEach(([key, value]) => { %>
+                    <th><%= key %></th>
+                <% } ) %>
+                <th>issues</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i<one.itemList.length;i++) { %>
+                <tr<%if (one.itemList[i].manualInput) {%> style="background-color: <% if((i+1) % 2 == 0) { %>#eab676"<%} else {%>#f0cc9f"<%} }%>>
+                    <% if (!one.locked&&manyCount>0) { %>
+                    <td><a href="/item/show/<%= one.itemList[i]._id%>">
+                            <img src="/bshw.png" alt="atr" width="30" height="15"></a></td>
+                    <%}%>
+                    <td><%= one.itemList[i].itemType%></td>
+                    <% if (['Aio', 'Desktop', 'Laptop'].includes(one.itemType)) { %>
+                        <td><%= one.itemList[i].specifications.processor %></td>
+                        <td><%= one.itemList[i].specifications.ramSize %></td>
+                        <td><%= one.itemList[i].specifications.hardDrive %></td>
+                    <% } %>
+                    <% if (!one.locked&&manyCount>0) { %>
+                        <td><label><input type="checkbox" class="moveitem" name="moveitem" id="<%= one.itemList[i]._id%>" value="<%= one.itemList[i]._id %>" /></label></td>
+                    <% } %>
+                    <% Object.entries(one.itemList[i].identify).forEach(([key, value]) => { %>
+                        <% if ((key=='product')&&(user.admin)) {%>
+                            <td><a href="/price/model/insert/<%= value %>"><%= value%></a></td>
+                        <% } else {%>
+                                <td><%= value%></td>
+                            <%}%>
+                    <% } ) %>
+                    <td>
+                        <% let issues = '' %>
+                        <% Object.entries(one.itemList[i].globalFaults).forEach(([key, value]) => { %>
+                            <% if (value) { issues += ' '; issues += key }%>
+                        <% } ) %>
+                        <% Object.entries(one.itemList[i].faults).forEach(([key, value]) => { %>
+                            <% if (value) { issues += ' '; issues += key }%>
+                        <% } ) %>
+                        <%= issues %>
+                    </td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    <% } %>
+    <% if (!one.locked&&manyCount>0) {%>
+    </form>
+    <% } %>
+</div>
+</body>
+</html>

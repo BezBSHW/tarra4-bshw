@@ -1,0 +1,154 @@
+body {
+    font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding:0;
+    background: #ffffff;
+}
+
+.topheading {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0px;
+}
+
+.topheading a {
+    display: inline-block;
+    width: 25%;
+    height: 28px;
+    color: #e4b61a;
+    padding: 0px;
+    text-align: center;
+    border-radius: 0px;
+    background: #2c3258;
+    font-weight: bold;
+    line-height: 25px;
+    text-decoration: none;
+    font-size: large;
+}
+
+.topheading a:hover {
+    color: #2c3258;
+    background: #e4b61a;
+}
+
+.topheading a:active {
+    background: #eeeeee;
+    color: #2c3258;
+}
+.container {
+    padding: 0;
+    border-radius: 3px;
+    background: #eeeeee;
+}
+
+.container table {
+    width: 100%;
+    border-collapse:collapse;
+}
+
+.container table th {
+    background:#92A9BD;
+    border: 1px inset #2c3258;
+}
+
+.container h1 {
+    background:#ffffff;
+}
+
+.container th:hover {
+    background:#2c3258;
+    border: 1px inset #92A9BD;
+    color: #e4b61a;
+}
+
+.container td:hover {
+    background:#2c3258;
+    border: 1px inset #92A9BD;
+    color: #e4b61a;
+}
+
+.container a:hover {
+    color: #e4b61a;
+    background:#2c3258;
+}
+
+.container a {
+    display: block;
+    color: black;
+}
+
+.container table tr td {
+    padding: 2px;
+    border-collapse: collapse;
+}
+
+.container table td {
+    border: 1px outset #92A9BD;
+}
+
+.container table tr:nth-child(4n+3) {
+    background: #ffffff;
+}
+
+.container table tr:nth-child(4n+4) {
+    background: #f2f2f2;
+}
+
+.container table tr:nth-child(4n+1) {
+    background: #ffffff;
+}
+
+.container table tr:nth-child(4n+2) {
+    background: #f2f2f2;
+}
+
+.topheading a,
+.container td,
+.container th {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 1s ease-in-out, color 1s ease-in-out, box-shadow 0.3s ease;
+}
+
+.topheading a:hover,
+.container td:hover,
+.container th:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.topheading a,
+.container td,
+.container th {
+    transition: background 1s ease, color 1s ease;
+}
+
+.container td:hover,
+.container th:hover {
+    background: linear-gradient(135deg, #92A9BD, #1c1e3d); /* Gradient background on hover */
+    color: #e4b61a;  /* Change text color on hover */
+    transition: background 0.5s ease, color 0.5s ease;  /* Smooth transition */
+}
+
+.topheading a,
+.container td:hover,
+.container th:hover {
+    background: linear-gradient(135deg, #2c3258, #1c1e3d); /* Subtle gradient for the links */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Optional text shadow for some pop */
+}
+
+.topheading a:hover {
+    color: rgba(44, 50, 88, 0.8); /* Lighter color on hover */
+    background: rgba(228, 182, 26, 0.8); /* Semi-transparent hover background */
+}
+
+.container td,
+.container th {
+    color: rgba(44, 50, 88, 0.8); /* Lighter color on hover */
+}
+
+
+label {
+    display: block;
+    min-height: 100%; /* for the latest browsers which support min-height */
+    height: auto !important; /* for newer IE versions */
+    height: 100%; /* the only height-related attribute that IE6 does not ignore  */
+}

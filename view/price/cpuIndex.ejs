@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Price Index List</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Price Index List">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Processor List - <%= processor.length%> items</h1>
+    <form action="/price/cpu/move/" method="post" oninvalid="subbutton.disabled=true; return true" onsubmit="subbutton.disabled=true; return true;">
+        <select name="movement">
+            <% for(let i=0;i<family.length;i++){%>
+            <option value="<%=family[i].id%>"><%=family[i].processorFamilyName%></option>
+            <%}%>
+        </select>
+        <button id="subbutton" type="submit">Move</button><a href="/price/cpu/family">Edit Families</a>
+    <% if(processor.length>0) { %>
+        <table class="list-table">
+            <thead>
+            <tr>
+                <th>Move</th>
+                <th>Model</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(let i=0; i<processor.length;i++) { %>
+                <tr>
+                    <td><label><input type="checkbox" class="moveitem" name="moveitem" id="<%= processor[i]._id%>" value="<%= processor[i]._id %>" /></label></td>
+                    <td><%= processor[i].model%></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <tr><td>No processors found</td></tr>
+    <% } %>
+    </form>
+</div>
+</body>
+</html>

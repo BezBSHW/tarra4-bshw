@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Edit</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="User Edit">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Edit</h1>
+    <form action="/user/update/<%= one._id%>" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <table>
+            <tbody>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" name="username" size="100" value="<%= one.username %>" /></td>
+            </tr>
+            <tr>
+                <td>Admin</td>
+                <td><select name="admin" value="<%= one.admin %>">
+                        <% if(one.admin==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>wipeR</td>
+                <td><select name="wipeR" value="<%= one.wipeR %>">
+                        <% if(one.wipeR==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>wipeE</td>
+                <td><select name="wipeE" value="<%= one.wipeE %>">
+                        <% if(one.wipeE==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>wipeC</td>
+                <td><select name="wipeC" value="<%= one.wipeC %>">
+                        <% if(one.wipeC==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>wipeS</td>
+                <td><select name="wipeS" value="<%= one.wipeS %>">
+                        <% if(one.wipeS==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>jobR</td>
+                <td><select name="jobR" value="<%= one.jobR %>">
+                        <% if(one.jobR==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>jobE</td>
+                <td><select name="jobE" value="<%= one.jobE %>">
+                        <% if(one.jobE==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>jobC</td>
+                <td><select name="jobC" value="<%= one.jobC %>">
+                        <% if(one.jobC==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>jobS</td>
+                <td><select name="jobS" value="<%= one.jobS %>">
+                        <% if(one.jobS==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>itemR</td>
+                <td><select name="itemR" value="<%= one.itemR %>">
+                        <% if(one.itemR==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>itemE</td>
+                <td><select name="itemE" value="<%= one.itemE %>">
+                        <% if(one.itemE==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>itemC</td>
+                <td><select name="itemC" value="<%= one.itemC %>">
+                        <% if(one.itemC==false) { %>
+                            <option value="false" selected="selected">false</option>
+                            <option value="true">true</option>
+                        <% } else {%>
+                            <option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                        <% } %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button id="subbutton" type="submit">Update</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>

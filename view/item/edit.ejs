@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Item Edit</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Item Edit">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1 style="text-align: center">Edit: <%= itemType %></h1>
+    <form action="/item/update/<%= one._id%>" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <table class="list-table">
+            <thead>
+            <tr>
+                <th>Ref ID</th>
+                <th>Customer</th>
+                <th>Received</th>
+                <th>Completed</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><%= one.fromId.fromBarcode %></td>
+                <td><%= one.fromId.businessName %></td>
+                <td><%= one.fromId.collectionDate %></td>
+                <td><% if(one.completed) { %><%= one.completionDate.toLocaleString()%><%} else {%>In progress<%}%></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">Item Type</td>
+                <td colspan="2"><input type="text" name="itemType" readonly="readonly" value="<%= one.itemType%>"/></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">FromId</td>
+                <td colspan="2"><%= one.fromId.fromBarcode%></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">Location</td>
+                <td colspan="2"><%= one.locationId.locate %></td>
+            </tr>
+            <% identList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='String') { %>
+                    <tr>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="text" name="<%= pathname%>" value="<%= one.get(pathname) %>"/></td>
+                    </tr>
+                <%}%>
+            <% }) %>
+            <% specList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='String') { %>
+                    <tr>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="text" name="<%= pathname%>" value="<%= one.get(pathname) %>"
+                            <% if(!one.manualInput) { %> readonly="readonly"<%}%>/></td>
+                    </tr>
+                <%}%>
+            <% }) %>
+            <% if (enums) { %>
+                <% enumsList.eachPath((pathname, schematype) => { %>
+                    <% if (schematype.instance=='String') { %>
+                        <tr>
+                            <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                            <td colspan="2">
+                                <select name="<%= pathname%>"<% if(!one.manualInput) { %> readonly="readonly"<%}%>>
+                                    <% fullSchema.path(pathname).options.enum.forEach(options => { %>
+                                        <% if (one.get(pathname) == options) { %>
+                                        <option value="<%= options%>" selected="selected"><%= options%></option>
+                                        <% } else { %>
+                                                <option value="<%= options%>"><%= options%></option>
+                                            <% } %>
+                                    <% }) %>
+                                </select>
+                            </td>
+                        </tr>
+                    <%}%>
+                <% }) %>
+            <%}%>
+            <tr>
+                <td colspan="2" style="text-align: right">cosmeticCondition</td>
+                <td colspan="2">
+                    <select name="cosmeticCondition">
+                        <% fullSchema.path('cosmeticCondition').options.enum.forEach(options => { %>
+                            <% if (one.get('cosmeticCondition') == options) { %>
+                                <option value="<%= options%>" selected="selected"><%= options%></option>
+                            <% } else { %>
+                                <option value="<%= options%>"><%= options%></option>
+                            <% } %>
+                        <% }) %>
+                    </select>
+                </td>
+            </tr>
+            <% let idCount=0 %>
+            <% faultList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='Boolean') { %>
+                    <tr>
+                        <input type="hidden" name="<%= pathname%>" value="false"/>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <% if (one.get(pathname)) { %>
+                            <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true" checked="checked" /></td>
+                        <% } else { %>
+                            <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true" /></td>
+                        <% } %>
+                        <% idCount++; %>
+                    </tr>
+                <% } %>
+            <% }) %>
+            <% globalFaults.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='Boolean') { %>
+                    <tr>
+                        <input type="hidden" name="<%= pathname%>" value="false"/>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <% if (one.get(pathname)) { %>
+                            <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true" checked="checked" /></td>
+                        <% } else { %>
+                            <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true" /></td>
+                        <% } %>
+                        <% idCount++; %>
+                    </tr>
+                <%}%>
+            <% }) %>
+            <tr>
+                <td colspan="4"><button id="subbutton" type="submit">Save</button></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>
+</body>
+</html>

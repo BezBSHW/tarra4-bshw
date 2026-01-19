@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= one.fromBarcode%> DD Report</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="DD Report">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<% if (!one.completed) {%>
+    <nav class="topheading">
+        <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+        <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+        <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+        <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+        <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+        <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+        <% if (user.admin) {%><a href="/user/">User</a><%}%>
+        <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+        <a href="/logout">Logout</a>
+    </nav>
+<% } %>
+<div class="container">
+    <% if (one.completed) {%><a href="/job/"><img src="/bshw-big.png" alt="BSHW banner"></a><%} else {%>
+            <img src="/bshw-big.png" alt="BSHW banner"><% } %>
+    <h1 style="text-align: center">Data Destruction Report</h1>
+    <table class="list-table">
+        <thead>
+        <tr>
+            <th>Ref ID</th>
+            <th>Customer</th>
+            <th>Contact</th>
+            <th>Received</th>
+            <th>Completed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><a href="/job/edit/<%= one._id%>"><%= one.fromBarcode %></a></td>
+            <td><%= one.businessName %></td>
+            <td><%= one.contactName %></td>
+            <td><%= one.collectionDate %></td>
+            <td><% if(one.completed) { %><a href="/job/dataunlock/<%= one._id%>"><%= one.completionDate.toLocaleString()%></a><%} else {%><a href="/job/datalock/<%= one._id%>">In progress</a><%}%></td>
+        </tr>
+        </tbody>
+    </table>
+    <% if(one.wipeList.length>0) { %>
+        <table class="list-table">
+            <thead>
+            <tr>
+                <th>Source</th>
+                <th>Model</th>
+                <th>Serial</th>
+                <th>Size</th>
+                <th>Started</th>
+                <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i<one.wipeList.length;i++) { %>
+                <tr>
+                    <td><% if(typeof one.wipeList[i].itemId !== 'undefined') { %>
+                            <%= one.wipeList[i].itemId.identify.product%> <%= one.wipeList[i].itemId.identify.version%> <%= one.wipeList[i].itemId.identify.serial%> <%= one.wipeList[i].itemId.identify.idBarcode%>
+                        <% } else { %>
+                            External Wipe
+                        <% } %></td>
+                    <td><%= one.wipeList[i].product%></td>
+                    <td><%= one.wipeList[i].serial%></td>
+                    <td><%= one.wipeList[i].size%></td>
+                    <td><% if(one.wipeList[i].started) { %>Wipe started: <%= one.wipeList[i].startedDate.toLocaleString() %>
+                        <% } %><% if(one.wipeList[i].finished) { %></td><td>Wipe completed: <%= one.wipeList[i].finishedDate.toLocaleString() %>
+                        <% } %><% if(one.wipeList[i].faulty) { %></td><td>Device destroyed: <%= one.wipeList[i].faultyDate.toLocaleString() %>
+                        <% } %></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    <% } %>
+</div>
+</body>
+</html>

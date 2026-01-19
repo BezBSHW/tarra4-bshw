@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Wipe Clone</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Wipe Clone">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Clone</h1>
+    <form action="/wipe/save" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <table>
+            <tbody>
+            <tr>
+                <td>From</td>
+                <td><input type="hidden" name="fromId" size="100" value="<%= one.fromId._id %>" /><%= one.fromId.fromBarcode%></td>
+            </tr>
+            <tr>
+                <td>Product</td>
+                <td><input type="text" name="product" size="100" value="<%= one.product %>" /></td>
+            </tr>
+            <tr>
+                <td>Serial</td>
+                <td><input type="text" name="serial" size="100" value="" autofocus /></td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td><input type="text" name="size" size="100" value="<%= one.size %>" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button id="subbutton" type="submit">Clone</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>

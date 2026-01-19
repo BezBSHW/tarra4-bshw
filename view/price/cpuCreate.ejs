@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Family Create</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Family Create">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Create</h1>
+    <form action="/price/cpu/save" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <table>
+            <tbody>
+            <tr>
+                <td>Family Name</td>
+                <td><input type="text" name="processorFamilyName" size="100" value="" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Desktop Buy/Sell</td>
+                <td><input type="number" name="desktop.buyPrice" size="100" value="0" required="required"/></td>
+                <td><input type="number" name="desktop.sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Laptop Buy/Sell</td>
+                <td><input type="number" name="laptop.buyPrice" size="100" value="0" required="required"/></td>
+                <td><input type="number" name="laptop.sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Aio Buy/Sell</td>
+                <td><input type="number" name="aio.buyPrice" size="100" value="0" required="required"/></td>
+                <td><input type="number" name="aio.sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Imac Buy/Sell</td>
+                <td><input type="number" name="imac.buyPrice" size="100" value="0" required="required"/></td>
+                <td><input type="number" name="imac.sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Macbook Buy/Sell</td>
+                <td><input type="number" name="macbook.buyPrice" size="100" value="0" required="required"/></td>
+                <td><input type="number" name="macbook.sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><button id="subbutton" type="submit">Save</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>

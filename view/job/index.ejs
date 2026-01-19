@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Job Index List</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Job Index List">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Job List - <%= many.length%> items</h1>
+    <% if(many.length>0) { %>
+        <table class="list-table">
+            <thead>
+            <tr>
+                <th colspan="2"><a href="/job/create">Add</a></th>
+                <th>From</th>
+                <th colspan="2">Company</th>
+                <th colspan="3">Contact</th>
+                <th>Notes</th>
+                <th>Wipe Req</th>
+                <th>Collect Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i<many.length;i++) { %>
+                <%if (many[i].completed) {%> <% if((i+1) % 2 == 0) { %>
+                    <tr style="background-color: #eab676">
+                <%} else {%>
+                    <tr style="background-color: #f0cc9f">
+                <%} } else { %>
+                <tr>
+                <% } %>
+                    <td><a href="/job/asset/<%= many[i]._id%>"><img src="/bshw.png" alt="atr" width="30" height="15"></a></td>
+                    <td><a href="/job/data/<%= many[i]._id%>">DD</a> <a href="/report/data/<%= many[i]._id%>">EXCEL</a></td>
+                    <td><%= many[i].fromBarcode%></td>
+                    <td><%= many[i].businessName%></td>
+                    <td><%= many[i].businessAddress%></td>
+                    <td><%= many[i].contactName%></td>
+                    <td><%= many[i].contactPhoneNumber%></td>
+                    <td><%= many[i].contactEmailAddress%></td>
+                    <td><a href="/report/sustain/<%= many[i]._id%>"><%= many[i].notes%></a></td>
+                    <td><%if(many[i].wipeReq=='0'){%>No<%} else {%>Yes<%}%></td>
+                    <td><%= many[i].collectionDate%></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <div><a href="/job/create">Add</a></div>
+    <% } %>
+</div>
+</body>
+</html>

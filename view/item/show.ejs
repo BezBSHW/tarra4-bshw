@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Item Show</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Item Show">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1 style="text-align: center">Show: <%=one.itemType%></h1>
+    <table class="list-table">
+        <thead>
+        <tr>
+            <th>Ref ID</th>
+            <th>Customer</th>
+            <th>Received</th>
+            <th>Completed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><%= one.fromId.fromBarcode %></td>
+            <td><%= one.fromId.businessName %></td>
+            <td><%= one.fromId.collectionDate %></td>
+            <td><% if(one.completed) { %><%= one.completionDate.toLocaleString()%><%} else {%>In progress<%}%></td>
+        </tr>
+        <tr>
+            <td colspan="2">Location</td>
+            <td colspan="2"><%= one.locationId.locate%></td>
+        </tr>
+        <% Object.entries(one.identify).forEach(([key, value]) => { %>
+            <tr>
+                <td colspan="2"><%= key%></td>
+                <td colspan="2"><%= value%></td>
+            </tr><% } ) %>
+        <tr>
+            <td colspan="2">cosmeticCondition</td>
+            <td colspan="2"><%= one.cosmeticCondition%></td>
+        </tr>
+<% Object.entries(one.specifications).forEach(([key, value]) => { %>
+    <% if (key!='empty'&&value!=undefined) { %>
+        <tr>
+            <td colspan="2"><%= key%></td>
+            <td colspan="2"><%= value%></td>
+        </tr>
+    <% }%>
+<% } ) %>
+<% if (enums) { %>
+    <% Object.entries(one.enumerators).forEach(([key, value]) => { %>
+        <% if (key!='empty'&&value!=undefined) { %>
+            <tr>
+                <td colspan="2"><%= key%></td>
+                <td colspan="2"><%= value%></td>
+            </tr>
+        <% }%>
+    <% } ) %>
+<%}%>
+<% Object.entries(one.faults).forEach(([key, value]) => { %>
+    <% if (value) { %>
+            <tr>
+                <td colspan="4" style="background-color: #ffcccc;text-align: center"><%= key%></td>
+            </tr>
+    <% }%>
+<% } ) %>
+<% Object.entries(one.globalFaults).forEach(([key, value]) => { %>
+    <% if(value) {%>
+            <tr>
+                <td colspan="4" style="background-color: #ffcccc;text-align: center"><%= key%></td>
+            </tr>
+    <% } %>
+<% } ) %>
+<%if(!one.fromId.completed){%>
+    <%if(user.itemE){%><tr><td  colspan="4"><a href="/item/edit/<%= one._id %>">EDIT</a></td></tr><%}%>
+    <%if(user.itemC){%><tr><td  colspan="4"><a href="/item/clone/<%= one._id%>">CLONE</a></td></tr><%}%>
+    <%if(user.itemE){%><tr><td  colspan="4"><a href="/item/delete/<%= one._id%>">DELETE</a></td></tr><%}%>
+<%}%>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

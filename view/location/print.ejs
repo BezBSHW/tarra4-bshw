@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Location Print</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Location Print">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Details</h1>
+        <% if(one.itemList.length>0) { %>
+            <h1><%= one.locate%> - <%= one.itemList.length%> items</h1>
+            <table class="list-table">
+                <thead>
+                <tr>
+                    <th>idBarcode</th>
+                    <th>serial</th>
+                    <th>brand</th>
+                    <th>model</th>
+                    <th>cpu</th>
+                    <th>ram</th>
+                    <th>drive</th>
+                    <th>notes</th>
+                    <th>price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for(var i=0; i<one.itemList.length;i++) { %>
+                    <tr>
+                        <td><%= one.itemList[i].identify.idBarcode %></td>
+                        <td><%= one.itemList[i].identify.serial %></td>
+                        <td><%= one.itemList[i].identify.brand %></td>
+                        <td><%= one.itemList[i].identify.product %> <%= one.itemList[i].identify.version %></td>
+                        <td><%= one.itemList[i].specifications.processor %></td>
+                        <td><%= one.itemList[i].specifications.ramSize %></td>
+                        <td><%= one.itemList[i].specifications.hardDrive %></td>
+                        <% let notes = one.itemList[i].identify.notes %>
+                        <% Object.entries(one.itemList[i].globalFaults).forEach(([key, value]) => { %>
+                            <% if (value) { notes += ' '; notes += key }%>
+                        <% } ) %>
+                        <% Object.entries(one.itemList[i].faults).forEach(([key, value]) => { %>
+                            <% if (value) { notes += ' '; notes += key }%>
+                        <% } ) %>
+                        <td><%=  notes%></td>
+                        <td><%= one.itemList[i].price%></td>
+                    </tr>
+                <% } %>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="text-align: right">Total:</td>
+                    <td><% totalPrice %></td>
+                </tr>
+                </tbody>
+            </table>
+        <% } %>
+</div>
+</body>
+</html>

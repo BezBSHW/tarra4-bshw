@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Import Job Item</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Import Job Item">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1 style="text-align: center">Import <%= itemType%></h1>
+    <form action="/item/import" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <input type="hidden" name="itemType" value="<%= itemType%>"/>
+        <input type="hidden" name="fromId" value="<%= currentJob._id %>"/>
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <th>Ref ID</th>
+                    <th>Customer</th>
+                    <th>Received</th>
+                    <th>Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><%= currentJob.fromBarcode %></td>
+                    <td><%= currentJob.businessName %></td>
+                    <td><%= currentJob.collectionDate %></td>
+                    <td><% if(currentJob.completed) { %><%= currentJob.completionDate.toLocaleString()%><%} else {%>In progress<%}%></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right">Location</td>
+                    <td colspan="2"><select name="locationId">
+                        <% let unlocked = false;%>
+                        <% for(let i=0;i<locations.length;i++){%>
+                            <% if (!locations[i].locked) {%>
+                                <% unlocked = true;%>
+                                    <% if (typeof previousItem !== 'undefined') {%>
+                                        <% if (previousItem.locationId == locations[i].id) {%>
+                                        <option value="<%=locations[i].id%>" selected="selected"><%=locations[i].locate%></option>
+                                        <% } else { %>
+                                        <option value="<%=locations[i].id%>"><%=locations[i].locate%></option>
+                                        <% } %>
+                                    <%} else {%>
+                                        <option value="<%=locations[i].id%>"><%=locations[i].locate%></option>
+                                    <% } %>
+                            <%}%>
+                        <%}%>
+                    </select>
+                    <%if(!unlocked){%>No unlocked locations found<%}%>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right">idBarcode</td>
+                    <td colspan="2"><input type="text" name="idBarcode" autofocus /></td>
+                </tr>
+                <tr>
+                    <% if (unlocked) {%>
+                    <td colspan="4"><button id="subbutton" type="submit">Import</button></td>
+                    <%} %>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <% if (typeof previousItem !== 'undefined') { %>
+    <h1 style="text-align: center">Previous Item Imported:</h1>
+    <table class="list-table">
+        <tbody>
+        <% Object.entries(previousItem.identify).forEach(([key, value]) => { %>
+            <tr>
+                <td colspan="2"><%= key%></td>
+                <td colspan="2"><%= value%></td>
+            </tr><% } ) %>
+        <tr>
+            <td colspan="2">cosmeticCondition</td>
+            <td colspan="2"><%= previousItem.cosmeticCondition%></td>
+        </tr>
+        <% Object.entries(previousItem.specifications).forEach(([key, value]) => { %>
+            <% if (key!='empty'&&value!=undefined) { %>
+                <tr>
+                    <td colspan="2"><%= key%></td>
+                    <td colspan="2"><%= value%></td>
+                </tr>
+            <% }%>
+        <% } ) %>
+        </tbody>
+    </table>
+    <% } %>
+</div>
+</body>
+</html>

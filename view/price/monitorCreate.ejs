@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Monitor Price Create</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Monitor Price Create">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Create</h1>
+    <form action="/price/monitor/save" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <table>
+            <tbody>
+            <tr>
+                <td>Size</td>
+                <td><input type="number" name="size" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Buy Price</td>
+                <td><input type="number" name="buyPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td>Sell Price</td>
+                <td><input type="number" name="sellPrice" size="100" value="0" required="required"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button id="subbutton" type="submit">Save</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Job Status</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Job Status">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <% if (data1.length>0) { %>
+        <h1>Item</h1>
+        <table>
+            <tbody>
+            <% for(var i=0; i<data1.length;i++) { %>
+            <tr><td><%= data1[i]._id.day %>/<%= data1[i]._id.month %>/<%= data1[i]._id.year %></td><td><%= data1[i].count %></td></tr>
+            <%}%>
+            </tbody>
+    </table>
+    <%}%>
+        <% if (data2.length>0) { %>
+            <h1>Wipe</h1>
+            <table>
+                <tbody>
+                <% for(var i=0; i<data2.length;i++) { %>
+                    <tr><td><%= data2[i]._id.day %>/<%= data2[i]._id.month %>/<%= data2[i]._id.year %></td><td><%= data2[i].count %></td></tr>
+                <%}%>
+                </tbody>
+            </table>
+        <%}%>
+</div>
+</body>
+</html>

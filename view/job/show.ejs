@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= one.fromBarcode%> Asset Report</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Asset Report">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<% if(!one.completed) {%>
+    <nav class="topheading">
+        <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+        <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+        <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+        <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+        <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+        <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+        <% if (user.admin) {%><a href="/user/">User</a><%}%>
+        <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+        <a href="/logout">Logout</a>
+    </nav>
+<% } %>
+<div class="container">
+    <% if (one.completed) {%><a href="/job/"><img src="/bshw-big.png" alt="BSHW banner"></a><%} else {%>
+        <img src="/bshw-big.png" alt="BSHW banner"><% } %>
+    <h1 style="text-align: center">Asset Report</h1>
+    <% if(!one.completed) {%>
+        <table>
+            <tr>
+                <td style="text-align: center"><a href="/job/bwip/<%= one._id %>/<%= one.fromBarcode %>" download="<%= one.fromBarcode %>.png">
+                <img src="/job/bwipimg/<%= one._id %>/<%= one.fromBarcode %>"></a></td>
+                <td style="text-align: center"><a href="/job/bwipqr/<%= one._id %>/<%= one.fromBarcode %>" download="<%= one.fromBarcode %>qr.png">
+                <img src="/job/bwipqrimg/<%= one._id %>/<%= one.fromBarcode %>"></a></td>
+            </tr>
+        </table>
+        <%}%>
+    <table class="list-table">
+        <thead>
+            <tr>
+                <th>Ref ID</th>
+                <th>Customer</th>
+                <th>Received</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="/job/edit/<%= one._id%>"><%= one.fromBarcode %></a></td>
+                <td><%= one.businessName %></td>
+                <td><%= one.collectionDate %></td>
+                <td><% if(one.completed) { %><a href="/job/unlock/<%= one._id%>">
+                            <%= one.completionDate.toLocaleString()%></a><%} else {%>
+                            <a href="/job/lock/<%= one._id%>">In progress</a><%}%></td>
+            </tr>
+        </tbody>
+    </table>
+    <%if(!one.completed) {%>
+    <table class="list-table">
+        <thead>
+            <th colspan="<%=enumList.length%>">Add item</th>
+        </thead>
+        <tbody>
+            <tr>
+                <% for(var enumHtml=0; enumHtml<enumList.length; enumHtml++) {%>
+                <td><a href="/item/create/<%=enumList[enumHtml]%>/<%=one._id%>"><%=enumList[enumHtml]%></a>
+                    <% if (['Aio', 'Desktop', 'Laptop'].includes(enumList[enumHtml])) { %>
+                    <a href="/item/import/<%=enumList[enumHtml]%>/<%=one._id%>">Import</a>
+                    <% } %>
+                </td>
+                <%}%>
+            </tr>
+        </tbody>
+    </table>
+        <%}%>
+
+	<% if(one.itemList.length>0) { %>
+        <table class="list-table">
+            <thead>
+            <tr>
+                <% if (!one.completed) {%>
+                    <th>S</th>
+                    <th>E</th>
+                    <th>C</th>
+                <%}%>
+                <th>itemType</th>
+                <% Object.entries(one.itemList[0].identify).forEach(([key, value]) => { %>
+                    <th><%= key%></th>
+                <% } ) %>
+                <th>Specs</th>
+                <th>cosmeticCondition</th>
+                <th>Faults</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i<one.itemList.length;i++) { %>
+                <tr>
+                    <% if (!one.completed) {%>
+                        <td><a href="/item/show/<%= one.itemList[i]._id%>">S</a></td>
+                        <td><a href="/item/edit/<%= one.itemList[i]._id%>">E</a></td>
+                        <td><a href="/item/clone/<%= one.itemList[i]._id%>">C</a></td>
+                    <%}%>
+                    <td><%= one.itemList[i].itemType%></td>
+                    <% Object.entries(one.itemList[i].identify).forEach(([key, value]) => { %>
+                        <td><%= value%></td>
+                    <% } ) %>
+                    <td>
+                        <% Object.entries(one.itemList[i].specifications).forEach(([key, value]) => { %>
+                            <%= value+' '%>
+                        <% } )%>
+                    </td>
+                    <td><%= one.itemList[i].cosmeticCondition %></td>
+                    <% let faulty = '' %>
+                    <% Object.entries(one.itemList[i].globalFaults).forEach(([key, value]) => { %>
+                        <% if(value===true) { %>
+                            <% faulty += key + ' ' %>
+                        <% } %>
+                    <% }) %>
+                    <% Object.entries(one.itemList[i].faults).forEach(([key, value]) => { %>
+                        <% if(value===true) { %>
+                            <% faulty += key + ' ' %>
+                        <% } %>
+                    <%})%>
+                    <td><%= faulty %></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    <% } %>
+
+</div>
+</body>
+</html>

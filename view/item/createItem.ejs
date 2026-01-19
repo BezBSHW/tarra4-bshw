@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Item Create Item</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Item Create Item">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1 style="text-align: center">Create <%= itemType%></h1>
+    <form action="/item/save" method="post" onsubmit="subbutton.disabled=true; return true;">
+        <input type="text" hidden="hidden" name="itemType" readonly="readonly" value="<%= itemType%>"/>
+        <table>
+            <tr>
+                <td colspan="2" style="text-align: right">FromId</td>
+                <td colspan="2"><select name="fromId">
+                    <% let openJobs = false;%>
+                    <% for(let i=0;i<jobs.length;i++){%>
+                        <% if (!jobs[i].completed) {%>
+                            <% openJobs = true;%>
+                    <option value="<%=jobs[i].id%>"><%=jobs[i].fromBarcode%></option>
+                        <%}%>
+                    <%}%>
+                    </select>
+                    <%if(!openJobs) {%>No open jobs found<%}%>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">Location</td>
+                <td colspan="2"><select name="locationId">
+                        <% let unlocked = false;%>
+                        <% for(let i=0;i<locations.length;i++){%>
+                        <% if (!locations[i].locked) {%>
+                            <% unlocked = true;%>
+                        <option value="<%=locations[i].id%>"><%=locations[i].locate%></option>
+                            <%}%>
+                        <%}%>
+                    </select>
+                    <%if(!unlocked){%>No unlocked locations found<%}%>
+                </td>
+            </tr>
+            <% identList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='String') { %>
+                    <tr>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="text" name="<%= pathname%>"<% if (pathname.slice(pathname.lastIndexOf('.')+1)=='idBarcode') {%> autofocus<%}%> /></td>
+                    </tr>
+                    <%}%>
+            <% }) %>
+            <% specList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='String') { %>
+                    <tr>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="text" name="<%= pathname%>" /></td>
+                    </tr>
+                    <%}%>
+            <% }) %>
+            <% if (enums) { %>
+            <% enumsList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='String') { %>
+                    <tr>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2">
+                            <select name="<%= pathname%>">
+                                <% fullSchema.path(pathname).options.enum.forEach(options => { %>
+                                    <option value="<%= options%>"><%= options%></option>
+                                <% }) %>
+                            </select>
+                        </td>
+                    </tr>
+                <%}%>
+            <% }) %>
+                <%}%>
+            <tr>
+                <td colspan="2" style="text-align: right">cosmeticCondition</td>
+                <td colspan="2">
+                    <select name="cosmeticCondition">
+                        <% fullSchema.path('cosmeticCondition').options.enum.forEach(options => { %>
+                            <option value="<%= options%>"><%= options%></option>
+                        <% }) %>
+                    </select>
+                </td>
+            </tr>
+            <% faultList.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='Boolean') { %>
+                    <tr>
+                        <input type="hidden" name="<%= pathname%>" value="false"/>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true"/></td>
+                    </tr>
+                <%}%>
+            <% }) %>
+            <% globalFaults.eachPath((pathname, schematype) => { %>
+                <% if (schematype.instance=='Boolean') { %>
+                    <tr>
+                        <input type="hidden" name="<%= pathname%>" value="false"/>
+                        <td colspan="2" style="text-align: right"><%= pathname.slice(pathname.lastIndexOf('.')+1)%></td>
+                        <td colspan="2"><input type="checkbox" name="<%= pathname%>" value="true"/></td>
+                    </tr>
+                <%}%>
+            <% }) %>
+            <tr>
+                <% if ((openJobs)&&(unlocked)) {%>
+                <td colspan="4"><button id="subbutton" type="submit">Save</button></td>
+                <%} %>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>

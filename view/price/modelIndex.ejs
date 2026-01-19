@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Model Override Price List</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Model Override Price List">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Model Override Price List - <%= many.length%> items</h1>
+    <% if(many.length>0) { %>
+    <table class="list-table">
+        <thead>
+        <tr>
+            <th><%if(user.admin) {%><a href="/price/model/create">Add</a><%}%></th>
+            <th>Model</th>
+            <th>Buy Price</th>
+            <th>Sell Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for(let i=0; i<many.length;i++) { %>
+            <tr>
+                <td><a href="/price/model/edit/<%= many[i]._id%>">
+                        <img src="/bshw.png" alt="atr" width="30" height="15"></a></td>
+                <td><%= many[i].model%></td>
+                <td><%= many[i].buyPrice%></td>
+                <td><%= many[i].sellPrice%></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+    <% } else { %>
+    <div><%if(user.admin) {%><a href="/price/model/create">Add</a><%}%></div>
+    <% } %>
+</div>
+</body>
+</html>

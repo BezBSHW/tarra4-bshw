@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Show</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="User Show">
+    <meta name="author" content="Beren Scott">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+<nav class="topheading">
+    <% if (user.itemR) {%><a href="/item/">New Items</a><%}%>
+    <% if (user.locationR) {%><a href="/location/">Locations</a><%}%>
+    <% if (user.jobR) {%><a href="/job/">Jobs</a><%}%>
+    <% if (user.itemR) {%><a href="/report/find">Find Items</a><%}%>
+    <% if (user.wipeR) {%><a href="/wipe/status">Wipe</a><%}%>
+    <% if (user.admin) {%><a href="/price/">Pricing</a><%}%>
+    <% if (user.admin) {%><a href="/user/">User</a><%}%>
+    <% if (user.admin) {%><a href="/admin/">Admin</a><%}%>
+    <a href="/logout">Logout</a>
+</nav>
+<div class="container">
+    <img src="/bshw-big.png" alt="BSHW banner">
+    <h1>Details</h1>
+    <table>
+        <tbody>
+        <tr>
+            <td>Username</td>
+            <td><%= one.username%></td>
+        </tr>
+        <tr>
+            <td>Admin</td>
+            <td><%= one.admin%></td>
+        </tr>
+        <tr>
+            <td>wipeR</td>
+            <td><%= one.wipeR%></td>
+        </tr>
+        <tr>
+            <td>wipeE</td>
+            <td><%= one.wipeE%></td>
+        </tr>
+        <tr>
+            <td>wipeC</td>
+            <td><%= one.wipeC%></td>
+        </tr>
+        <tr>
+            <td>wipeS</td>
+            <td><%= one.wipeS%></td>
+        </tr>
+        <tr>
+            <td>jobR</td>
+            <td><%= one.jobR%></td>
+        </tr>
+        <tr>
+            <td>jobE</td>
+            <td><%= one.jobE%></td>
+        </tr>
+        <tr>
+            <td>jobC</td>
+            <td><%= one.jobC%></td>
+        </tr>
+        <tr>
+            <td>jobS</td>
+            <td><%= one.jobS%></td>
+        </tr>
+        <tr>
+            <td>itemR</td>
+            <td><%= one.itemR%></td>
+        </tr>
+        <tr>
+            <td>itemE</td>
+            <td><%= one.itemE%></td>
+        </tr>
+        <tr>
+            <td>itemC</td>
+            <td><%= one.itemC%></td>
+        </tr>
+        <tr>
+            <td><a href="/user/edit/<%= one._id %>">EDIT</a></td>
+            <td><a href="/user/pass/<%= one._id %>">SET PASS</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
