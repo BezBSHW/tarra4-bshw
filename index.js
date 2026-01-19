@@ -17,7 +17,6 @@ mongoose.connect(uri).then(() => {
     console.log(err);
 });
 
-
 /**
  * Route inclusion declaration
  */
